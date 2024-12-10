@@ -11,7 +11,7 @@ import {
   Typography,
 } from "antd";
 
-const { Text, title } = Typography;
+const { Text } = Typography;
 
 import logo from "../../assets/logo.jpg";
 
