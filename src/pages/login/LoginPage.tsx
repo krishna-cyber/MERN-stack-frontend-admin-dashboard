@@ -60,21 +60,49 @@ const LoginPage = () => {
             }
           >
             <Form>
-              <Form.Item name={"username"}>
-                <Input prefix={<UserOutlined />} placeholder="Username" />
+              <Form.Item
+                name={"username"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Username is required",
+                    transform: (value) => value.trim(),
+                  },
+                  {
+                    type: "email",
+                    message: "Please enter a valid email",
+                  },
+                ]}
+              >
+                <Input
+                  size="large"
+                  prefix={<UserOutlined />}
+                  placeholder="Username"
+                />
               </Form.Item>
 
-              <Form.Item name={"password"}>
+              <Form.Item
+                name={"password"}
+                rules={[{ required: true, message: "Password is required" }]}
+              >
                 <Input.Password
+                  size="large"
                   prefix={<LockOutlined />}
                   placeholder="Password"
                 />
               </Form.Item>
 
               <Form.Item name="remember" valuePropName="checked" label={null}>
-                <Checkbox>Remember me</Checkbox>
+                <Space
+                  style={{
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Checkbox>Remember me</Checkbox>
 
-                <a href="">Forgot password</a>
+                  <a href="">Forgot password</a>
+                </Space>
               </Form.Item>
 
               <Form.Item name="submit">
