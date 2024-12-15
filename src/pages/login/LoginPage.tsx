@@ -18,9 +18,17 @@ const { Text } = Typography;
 import logo from "../../assets/logo.jpg";
 
 import { useUserLogin } from "../../http/mutations/mutations";
+import { useAuthStore } from "../../store";
+import { Navigate } from "react-router-dom";
 
 const LoginPage = () => {
   const { mutate, isPending, isError, error } = useUserLogin();
+
+  const { user } = useAuthStore();
+
+  if (user) {
+    return <Navigate to="/" replace={true} />;
+  }
 
   return (
     <>
