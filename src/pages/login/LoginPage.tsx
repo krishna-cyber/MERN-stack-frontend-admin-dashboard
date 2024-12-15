@@ -25,6 +25,7 @@ const LoginPage = () => {
   return (
     <>
       <Layout
+        fds
         style={{
           height: "100vh",
           display: "grid",
