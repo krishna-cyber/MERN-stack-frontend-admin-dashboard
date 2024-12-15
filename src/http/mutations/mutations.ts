@@ -10,11 +10,11 @@ export function useUserLogin() {
   return useMutation({
     mutationFn: async (data: LoginCredentials) => await login(data),
     onSuccess: async () => {
-      refetch();
+      await refetch();
 
       if (
-        data?.data.result.role == "admin" ||
-        data?.data.result.role == "manager"
+        data?.data.result.role === "admin" ||
+        data?.data.result.role === "manager"
       ) {
         setUser(data?.data.result);
       } else {
