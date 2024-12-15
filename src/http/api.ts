@@ -5,4 +5,8 @@ const login = async (credentials: LoginCredentials) => {
   return api.post("/auth/login", credentials);
 };
 
-export { login };
+const self = async () => {
+  return api.get("/auth/self");
+};
+
+export { login, self };

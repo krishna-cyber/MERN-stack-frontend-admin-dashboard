@@ -1,4 +1,5 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+
 import {
   Alert,
   Avatar,
@@ -15,23 +16,11 @@ import {
 const { Text } = Typography;
 
 import logo from "../../assets/logo.jpg";
-import { useMutation } from "@tanstack/react-query";
-import { LoginCredentials } from "../../types";
-import { login } from "../../http/api";
+
+import { useUserLogin } from "../../http/mutations/mutations";
 
 const LoginPage = () => {
-  const loginUser = async (values: LoginCredentials) => {
-    await login(values);
-  };
-
-  const { mutate, isPending, isError, error } = useMutation({
-    mutationKey: ["login"],
-    mutationFn: loginUser,
-
-    onSuccess: () => {
-      console.log("Login successful");
-    },
-  });
+  const { mutate, isPending, isError, error } = useUserLogin();
 
   return (
     <>
