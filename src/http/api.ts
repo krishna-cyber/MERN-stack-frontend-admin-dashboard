@@ -9,4 +9,8 @@ const self = async () => {
   return api.get("/auth/self");
 };
 
-export { login, self };
+const logout = async () => {
+  return api.get("/auth/logout");
+};
+
+export { login, self, logout };
