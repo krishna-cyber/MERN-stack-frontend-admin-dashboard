@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import Homepage from "./pages/Homepage";
 import Categories from "./pages/Categories";
 import LoginPage from "./pages/login/LoginPage";
 import Dashboard from "./layouts/Dashboard";
@@ -11,14 +10,8 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "",
+        index: true,
         element: <Dashboard />,
-        children: [
-          {
-            index: true,
-            element: <Homepage />,
-          },
-        ],
       },
 
       {
@@ -26,7 +19,7 @@ export const router = createBrowserRouter([
         element: <Categories />,
       },
       {
-        path: "/auth/login",
+        path: "/login",
         element: <LoginPage />,
       },
     ],

@@ -17,14 +17,28 @@ const { Text } = Typography;
 
 import logo from "../../assets/logo.jpg";
 
-import { useUserLogin } from "../../http/mutations/mutations";
 import { useAuthStore } from "../../store";
 import { Navigate } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { login, self } from "../../http/api";
 
 const LoginPage = () => {
-  const { mutate, isPending, isError, error } = useUserLogin();
-
+  // const { mutate, isError, error, isPending } = useUserLogin();
   const { user } = useAuthStore();
+
+  const getSelf = useQuery({
+    queryKey: ["self"],
+    queryFn: self,
+    retry: false,
+    enabled: false, // Disable automatic query execution
+  });
+  const loginMutation = useMutation({
+    mutationFn: login,
+    mutationKey: ["login"],
+    onSuccess: async () => {
+      await getSelf.refetch();
+    },
+  });
 
   if (user) {
     return <Navigate to="/" replace={true} />;
@@ -73,14 +87,14 @@ const LoginPage = () => {
               </Space>
             }
           >
-            {isError && (
+            {loginMutation.isError && (
               <Alert
                 style={{
                   marginBottom: 16,
                 }}
                 closable
                 type="error"
-                message={error.message}
+                message={loginMutation.error.message}
               />
             )}
             <Form
@@ -88,7 +102,10 @@ const LoginPage = () => {
                 remember: true,
               }}
               onFinish={(values) => {
-                mutate({ email: values.username, password: values.password });
+                loginMutation.mutate({
+                  email: values.username,
+                  password: values.password,
+                });
               }}
             >
               <Form.Item
@@ -143,7 +160,7 @@ const LoginPage = () => {
                   style={{
                     width: "100%",
                   }}
-                  loading={isPending}
+                  loading={loginMutation.isPending}
                 >
                   Log in
                 </Button>

@@ -1,10 +1,17 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { useGetSelf } from "./http/queries/queries";
 import { useAuthStore } from "./store";
+import { useQuery } from "@tanstack/react-query";
+import { self } from "./http/api";
 
 const App = () => {
-  const { data, isLoading } = useGetSelf();
+  // const { data, isLoading } = useGetSelf();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["self"],
+    queryFn: self,
+    retry: false,
+  });
   const { setUser } = useAuthStore();
 
   useEffect(() => {
