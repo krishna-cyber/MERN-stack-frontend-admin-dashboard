@@ -1,8 +1,21 @@
 import { Navigate, NavLink, Outlet } from "react-router-dom";
 import { useAuthStore } from "../store";
-import { Avatar, Layout, Menu, theme } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Dropdown,
+  Flex,
+  Layout,
+  Menu,
+  Space,
+  Tag,
+  theme,
+} from "antd";
 import { useState } from "react";
 import {
+  BellFilled,
   CreditCardOutlined,
   HomeFilled,
   UserOutlined,
@@ -87,22 +100,54 @@ const Dashboard = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
-        <Content style={{ margin: "0 16px" }}>
-          {/* <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Flex
+            justify={"space-between"}
+            align="center"
+            style={{ padding: 16, width: "100%" }}
           >
-            Bill is a cat.
-          </div> */}
+            <Tag color="success">
+              <Badge status="success" style={{ paddingRight: 4 }} />
+              Global
+            </Tag>
+            <Space size={40}>
+              <Badge dot={true}>
+                <BellFilled />
+              </Badge>
+              <Dropdown
+                trigger={["click"]}
+                menu={{
+                  items: [
+                    {
+                      key: "/logout",
+                      label: "Logout",
+                    },
+                  ],
+                }}
+                placement="bottomLeft"
+                arrow={{ pointAtCenter: true }}
+              >
+                <Avatar
+                  style={{
+                    backgroundColor: "#fde3cf",
+                    color: "#f56a00",
+                    cursor: "pointer",
+                  }}
+                >
+                  U
+                </Avatar>
+              </Dropdown>
+            </Space>
+          </Flex>
+        </Header>
+        <Content style={{ margin: "0 16px" }}>
           <Outlet />
         </Content>
         <Footer style={{ textAlign: "center" }}>
