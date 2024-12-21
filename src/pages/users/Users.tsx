@@ -1,17 +1,46 @@
 import { RightOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Space, Table } from "antd";
 import { NavLink } from "react-router-dom";
 import { getUsers } from "../../http/api";
+import type { TableProps } from "antd";
 import { User } from "../../store";
 
+const columns: TableProps<User>["columns"] = [
+  {
+    title: "ID",
+    dataIndex: "_id",
+    key: "_id",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    render(_value, record) {
+      return (
+        <div>
+          {record.firstName} {record.lastName}
+        </div>
+      );
+    },
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+    render(value) {
+      return value;
+    },
+  },
+  {
+    title: "Role",
+    dataIndex: "role",
+    key: "role",
+  },
+];
+
 const Users = () => {
-  const {
-    data: usersData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: usersData, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await getUsers();
@@ -20,7 +49,7 @@ const Users = () => {
   });
 
   return (
-    <>
+    <Space direction="vertical" size={"middle"} style={{ width: "100%" }}>
       <Breadcrumb
         separator={<RightOutlined />}
         items={[
@@ -29,20 +58,8 @@ const Users = () => {
         ]}
       />
       {isLoading && <div>Loading...</div>}
-      {usersData && (
-        <ul>
-          {usersData?.result.map((user: User) => {
-            return (
-              <li key={user._id}>
-                {user.firstName} {user.lastName}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-
-      {isError && <div>{error.message}</div>}
-    </>
+      <Table columns={columns} dataSource={usersData.result} />
+    </Space>
   );
 };
 
