@@ -1,6 +1,5 @@
 import { RightOutlined } from "@ant-design/icons";
 import { Breadcrumb } from "antd";
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Users = () => {
