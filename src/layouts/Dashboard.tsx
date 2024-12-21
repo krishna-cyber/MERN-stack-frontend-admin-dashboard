@@ -163,7 +163,8 @@ const Dashboard = () => {
           <Outlet />
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Mern stack Project ©{new Date().getFullYear()} Created by Krishna
+          Tiwari
         </Footer>
       </Layout>
     </Layout>

@@ -11,7 +11,11 @@ const api = axios.create({
 });
 
 const refreshToken = async () => {
-  return axios.post("/auth/refresh", {}, { withCredentials: true });
+  return axios.post(
+    `${import.meta.env.VITE_API_URL}/auth/refresh`,
+    {},
+    { withCredentials: true }
+  );
 };
 
 //response interceptor to refresh token on receiving token expired error
