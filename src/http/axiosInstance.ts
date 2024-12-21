@@ -10,8 +10,8 @@ const api = axios.create({
   },
 });
 
-const getSelf = async () => {
-  return axios.get("/auth/self", { withCredentials: true });
+const refreshToken = async () => {
+  return axios.post("/auth/refresh", {}, { withCredentials: true });
 };
 
 //response interceptor to refresh token on receiving token expired error
@@ -29,7 +29,7 @@ api.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest._retry) {
       try {
-        await getSelf();
+        await refreshToken();
         console.log(error.response.status + " " + originalRequest._retry);
         originalRequest._retry = true;
         return axios.request(originalRequest);

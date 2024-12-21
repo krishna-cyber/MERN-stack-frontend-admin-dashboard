@@ -10,7 +10,7 @@ const self = async () => {
 };
 
 const logout = async () => {
-  return api.get("/auth/logout");
+  return await api.get("/auth/logout");
 };
 
 export { login, self, logout };

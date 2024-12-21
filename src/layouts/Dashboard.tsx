@@ -3,8 +3,6 @@ import { useAuthStore } from "../store";
 import {
   Avatar,
   Badge,
-  Button,
-  Card,
   Dropdown,
   Flex,
   Layout,
@@ -21,12 +19,23 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import logo from "../assets/logo.jpg";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "../http/api";
 
 const { Sider, Content, Footer, Header } = Layout;
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuthStore();
+  const { logOut: logOutFromStore } = useAuthStore();
+
+  const { mutate: logOutMutate } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: logout,
+    onSuccess: () => {
+      logOutFromStore();
+    },
+  });
 
   const {
     token: { colorBgContainer },
@@ -128,6 +137,9 @@ const Dashboard = () => {
                     {
                       key: "/logout",
                       label: "Logout",
+                      onClick: () => {
+                        logOutMutate();
+                      },
                     },
                   ],
                 }}
