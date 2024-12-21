@@ -13,4 +13,8 @@ const logout = async () => {
   return await api.get("/auth/logout");
 };
 
-export { login, self, logout };
+const getUsers = async () => {
+  return api.get("/users");
+};
+
+export { login, self, logout, getUsers };
