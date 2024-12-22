@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { getUsers } from "../../http/api";
 import type { TableProps } from "antd";
 import { User } from "../../store";
+import UserFilters from "./UserFilters";
 
 const columns: TableProps<User>["columns"] = [
   {
@@ -57,6 +58,7 @@ const Users = () => {
           { title: <NavLink to={"/users"}>Users</NavLink> },
         ]}
       />
+      <UserFilters />
       {isLoading && <div>Loading...</div>}
       <Table columns={columns} dataSource={usersData?.result} />
     </Space>
