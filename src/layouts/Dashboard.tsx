@@ -12,10 +12,12 @@ import {
   theme,
 } from "antd";
 import { useState } from "react";
-import {
+import { ResturantIcon } from "../assets/Icons.tsx";
+import Icon, {
   BellFilled,
-  CreditCardOutlined,
+  GiftOutlined,
   HomeFilled,
+  ProductOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import logo from "../assets/logo.jpg";
@@ -34,16 +36,22 @@ function getMenuItems(role: string) {
     },
 
     {
-      key: "/orders",
-      label: <NavLink to={"/orders"}>Orders</NavLink>,
-      icon: <CreditCardOutlined />,
+      key: "/Resturant",
+      label: <NavLink to={"/resturants"}>Resturant</NavLink>,
+      icon: <Icon component={ResturantIcon} />,
       priority: 3,
     },
     {
       key: "/products",
       label: <NavLink to={"/products"}>Products</NavLink>,
-      icon: <UserOutlined />,
+      icon: <ProductOutlined />,
       priority: 4,
+    },
+    {
+      key: "/Promos",
+      label: <NavLink to={"/promos"}>Promos</NavLink>,
+      icon: <GiftOutlined />,
+      priority: 5,
     },
   ];
 
