@@ -34,7 +34,6 @@ api.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       try {
         await refreshToken();
-        console.log(error.response.status + " " + originalRequest._retry);
         originalRequest._retry = true;
         return axios.request(originalRequest);
       } catch (error) {

@@ -58,9 +58,13 @@ const Users = () => {
           { title: <NavLink to={"/users"}>Users</NavLink> },
         ]}
       />
-      <UserFilters />
+      <UserFilters
+        onFilterChange={(filterName: string, filterValue: string) => {
+          console.log(filterName, filterValue);
+        }}
+      />
       {isLoading && <div>Loading...</div>}
-      <Table columns={columns} dataSource={usersData?.result} />
+      <Table columns={columns} dataSource={usersData?.result} rowKey={"_id"} />
     </Space>
   );
 };
