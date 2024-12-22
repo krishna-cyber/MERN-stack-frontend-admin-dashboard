@@ -24,6 +24,46 @@ import { logout } from "../http/api";
 
 const { Sider, Content, Footer, Header } = Layout;
 
+function getMenuItems(role: string) {
+  const baseItems = [
+    {
+      key: "/",
+      label: <NavLink to={"/"}>Home</NavLink>,
+      icon: <HomeFilled />,
+      priority: 1,
+    },
+
+    {
+      key: "/orders",
+      label: <NavLink to={"/orders"}>Orders</NavLink>,
+      icon: <CreditCardOutlined />,
+      priority: 3,
+    },
+    {
+      key: "/products",
+      label: <NavLink to={"/products"}>Products</NavLink>,
+      icon: <UserOutlined />,
+      priority: 4,
+    },
+  ];
+
+  if (role === "admin") {
+    const adminMenuItems = [
+      ...baseItems,
+      {
+        key: "/users",
+        label: <NavLink to={"/users"}>Users</NavLink>,
+        icon: <UserOutlined />,
+        priority: 2,
+      },
+    ].sort((a, b) => a.priority - b.priority);
+
+    return adminMenuItems;
+  }
+
+  return baseItems;
+}
+
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuthStore();
@@ -41,33 +81,7 @@ const Dashboard = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const items = [
-    {
-      key: "/",
-      label: <NavLink to={"/"}>Home</NavLink>,
-      icon: <HomeFilled />,
-    },
-    {
-      key: "/users",
-      label: <NavLink to={"/users"}>Users</NavLink>,
-      icon: <UserOutlined />,
-    },
-    {
-      key: "/orders",
-      label: <NavLink to={"/orders"}>Orders</NavLink>,
-      icon: <CreditCardOutlined />,
-    },
-    {
-      key: "/products",
-      label: <NavLink to={"/products"}>Products</NavLink>,
-      icon: <UserOutlined />,
-    },
-    {
-      key: "2",
-      label: <NavLink to={"/users"}>Users</NavLink>,
-      icon: <UserOutlined />,
-    },
-  ];
+  const menuItems = getMenuItems(user?.role);
 
   if (!user) {
     return <Navigate to="/login" replace={true} />;
@@ -105,7 +119,7 @@ const Dashboard = () => {
           theme="light"
           defaultSelectedKeys={["/"]}
           mode="inline"
-          items={items}
+          items={menuItems}
         />
       </Sider>
       <Layout>
