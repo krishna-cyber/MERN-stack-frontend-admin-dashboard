@@ -81,7 +81,7 @@ const Dashboard = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const menuItems = getMenuItems(user?.role);
+  const menuItems = getMenuItems(user?.role as string);
 
   if (!user) {
     return <Navigate to="/login" replace={true} />;
