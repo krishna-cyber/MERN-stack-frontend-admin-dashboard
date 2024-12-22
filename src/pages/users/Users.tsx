@@ -58,7 +58,7 @@ const Users = () => {
         ]}
       />
       {isLoading && <div>Loading...</div>}
-      <Table columns={columns} dataSource={usersData.result} />
+      <Table columns={columns} dataSource={usersData?.result} />
     </Space>
   );
 };
