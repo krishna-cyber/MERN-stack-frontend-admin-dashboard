@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
 import { getTenants } from "../../../http/api";
+import { Tenant } from "../../../types";
 
 const UserForm = () => {
   const { data: tenants } = useQuery({
@@ -76,7 +77,7 @@ const UserForm = () => {
                   onChange={() => {}}
                   placeholder="Resturants"
                 >
-                  {tenants?.result.map((tenant) => {
+                  {tenants?.result.map((tenant: Tenant) => {
                     return (
                       <Select.Option value={tenant._id}>
                         {tenant.name}
