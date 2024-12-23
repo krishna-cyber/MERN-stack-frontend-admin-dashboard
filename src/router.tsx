@@ -5,6 +5,7 @@ import Dashboard from "./layouts/Dashboard";
 import App from "./app";
 import Homepage from "./pages/Homepage";
 import Users from "./pages/users/Users";
+import Resturants from "./pages/resturants/Resturants";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
           {
             path: "/users",
             element: <Users />,
+          },
+          {
+            path: "/tenants",
+            element: <Resturants />,
           },
         ],
       },

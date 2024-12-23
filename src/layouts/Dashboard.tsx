@@ -36,8 +36,8 @@ function getMenuItems(role: string) {
     },
 
     {
-      key: "/Resturant",
-      label: <NavLink to={"/resturants"}>Resturant</NavLink>,
+      key: "/tenants",
+      label: <NavLink to={"/tenants"}>Resturant</NavLink>,
       icon: <Icon component={ResturantIcon} />,
       priority: 3,
     },

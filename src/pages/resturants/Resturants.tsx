@@ -2,13 +2,13 @@ import { RightOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Breadcrumb, Space, Table } from "antd";
 import { NavLink } from "react-router-dom";
-import { getUsers } from "../../http/api";
+import { getTenants } from "../../http/api";
 import type { TableProps } from "antd";
-import { User } from "../../store";
-import UserFilters from "./UserFilters";
-import UserDrawerForm from "./UserDrawerForm";
+import ResturantFilters from "./ResturantFilters";
+import ResturantDrawerForm from "./ResturantDrawerForm";
+import { Tenant } from "../../types";
 
-const columns: TableProps<User>["columns"] = [
+const columns: TableProps<Tenant>["columns"] = [
   {
     title: "ID",
     dataIndex: "_id",
@@ -19,11 +19,7 @@ const columns: TableProps<User>["columns"] = [
     dataIndex: "name",
     key: "name",
     render(_value, record) {
-      return (
-        <div>
-          {record.firstName} {record.lastName}
-        </div>
-      );
+      return <div>{record.name}</div>;
     },
   },
   {
@@ -34,18 +30,13 @@ const columns: TableProps<User>["columns"] = [
       return value;
     },
   },
-  {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
-  },
 ];
 
-const Users = () => {
-  const { data: usersData, isLoading } = useQuery({
-    queryKey: ["users"],
+const Resturants = () => {
+  const { data: tenants, isLoading } = useQuery({
+    queryKey: ["tenants"],
     queryFn: async () => {
-      const res = await getUsers();
+      const res = await getTenants();
       return res.data;
     },
   });
@@ -56,20 +47,20 @@ const Users = () => {
         separator={<RightOutlined />}
         items={[
           { title: <NavLink to={"/"}>Home</NavLink> },
-          { title: <NavLink to={"/users"}>Users</NavLink> },
+          { title: <NavLink to={"/tenants"}>Resturants</NavLink> },
         ]}
       />
-      <UserFilters
+      <ResturantFilters
         onFilterChange={(filterName: string, filterValue: string) => {
           console.log(filterName, filterValue);
         }}
       >
-        <UserDrawerForm />
-      </UserFilters>
+        <ResturantDrawerForm />
+      </ResturantFilters>
       {isLoading && <div>Loading...</div>}
-      <Table columns={columns} dataSource={usersData?.result} rowKey={"_id"} />
+      <Table columns={columns} dataSource={tenants?.result} rowKey={"_id"} />
     </Space>
   );
 };
 
-export default Users;
+export default Resturants;

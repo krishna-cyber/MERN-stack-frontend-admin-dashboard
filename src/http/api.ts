@@ -17,4 +17,8 @@ const getUsers = async () => {
   return api.get("/users");
 };
 
-export { login, self, logout, getUsers };
+const getTenants = async () => {
+  return api.get("/tenants");
+};
+
+export { login, self, logout, getUsers, getTenants };
