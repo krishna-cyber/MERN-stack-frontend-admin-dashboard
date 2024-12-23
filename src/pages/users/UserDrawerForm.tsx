@@ -1,6 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Drawer, Space, theme } from "antd";
+import { Button, Drawer, Form, Space, theme } from "antd";
 import { useState } from "react";
+import UserForm from "./forms/UserForm";
 
 const UserDrawerForm = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -35,8 +36,9 @@ const UserDrawerForm = () => {
           </Space>
         }
       >
-        <p>Some content...</p>
-        <p>Some Content</p>
+        <Form layout="vertical">
+          <UserForm />
+        </Form>
       </Drawer>
     </>
   );
