@@ -17,17 +17,51 @@ const UserForm = () => {
         <Card size="small" title="Basic Information" style={{ width: "100%" }}>
           <Row gutter={20}>
             <Col span={12}>
-              <Form.Item required label="First Name" name="firstName">
+              <Form.Item
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: "First Name is required",
+                  },
+                ]}
+                label="First Name"
+                name="firstName"
+              >
                 <Input size="large" allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item required label="Last Name" name="lastName">
+              <Form.Item
+                hasFeedback
+                label="Last Name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Last Name is required",
+                  },
+                ]}
+                name="lastName"
+              >
                 <Input size="large" allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item required label="E-mail" name="email">
+              <Form.Item
+                hasFeedback
+                label="E-mail"
+                rules={[
+                  {
+                    required: true,
+                    message: "Email is required",
+                  },
+                  {
+                    type: "email",
+                    message: "Email is not valid",
+                  },
+                ]}
+                name="email"
+              >
                 <Input size="large" allowClear />
               </Form.Item>
             </Col>
@@ -41,12 +75,45 @@ const UserForm = () => {
         >
           <Row gutter={20}>
             <Col span={12}>
-              <Form.Item required label="Password" name="password">
+              <Form.Item
+                hasFeedback
+                label="Password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Password is required",
+                  },
+                ]}
+                name="password"
+              >
                 <Input.Password size="large" allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item required label="Confirm Password">
+              <Form.Item
+                hasFeedback
+                label="Confirm Password"
+                dependencies={["password"]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Confirm Password is required",
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          "The new password that you entered do not match!"
+                        )
+                      );
+                    },
+                  }),
+                ]}
+                name="confirmPassword"
+              >
                 <Input.Password size="large" allowClear />
               </Form.Item>
             </Col>
@@ -56,7 +123,17 @@ const UserForm = () => {
         <Card size="small" title="Role Information" style={{ width: "100%" }}>
           <Row gutter={20}>
             <Col span={12}>
-              <Form.Item required label="Roles" name="role">
+              <Form.Item
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: "Role is required",
+                  },
+                ]}
+                label="Roles"
+                name="role"
+              >
                 <Select
                   allowClear
                   style={{ width: "100%" }}
@@ -70,7 +147,7 @@ const UserForm = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="Resturants" name="tenantId">
+              <Form.Item hasFeedback label="Resturants" name="tenantId">
                 <Select
                   allowClear
                   style={{ width: "100%" }}
