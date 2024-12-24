@@ -2,13 +2,27 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, Space, theme } from "antd";
 import { useState } from "react";
 import UserForm from "./forms/UserForm";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createUser } from "../../http/api";
+import { CreateUserType } from "../../types";
 
 const UserDrawerForm = () => {
+  const queryClient = useQueryClient();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  const [form] = Form.useForm();
   const {
     token: { colorBgLayout },
   } = theme.useToken();
+
+  const { mutate: createUserMutate, isPending } = useMutation({
+    mutationKey: ["createUser"],
+    mutationFn: async (data: CreateUserType) => createUser(data),
+    onSuccess: () => {
+      form.resetFields();
+      setDrawerOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["users"], exact: true });
+    },
+  });
 
   return (
     <>
@@ -26,17 +40,36 @@ const UserDrawerForm = () => {
         open={drawerOpen}
         width={700}
         onClose={() => {
+          form.resetFields();
           setDrawerOpen(false);
         }}
         destroyOnClose={true}
         extra={
           <Space size={"middle"}>
-            <Button onClick={() => setDrawerOpen(false)}>Cancel</Button>
-            <Button type="primary">Submit</Button>
+            <Button
+              onClick={() => {
+                form.resetFields();
+                setDrawerOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              loading={isPending}
+              type="primary"
+              onClick={async () => {
+                await form.validateFields();
+                const formData = form.getFieldsValue();
+                delete formData.confirmPassword;
+                createUserMutate(formData);
+              }}
+            >
+              Submit
+            </Button>
           </Space>
         }
       >
-        <Form layout="vertical">
+        <Form form={form} layout="vertical">
           <UserForm />
         </Form>
       </Drawer>

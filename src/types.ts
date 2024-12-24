@@ -9,4 +9,13 @@ interface Tenant {
   address: string;
 }
 
-export type { LoginCredentials, Tenant };
+interface CreateUserType {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+  tenatId?: string;
+}
+
+export type { LoginCredentials, Tenant, CreateUserType };

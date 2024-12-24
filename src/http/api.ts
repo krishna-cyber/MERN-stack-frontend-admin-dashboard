@@ -1,4 +1,4 @@
-import { LoginCredentials } from "../types";
+import { CreateUserType, LoginCredentials } from "../types";
 import api from "./axiosInstance";
 
 const login = async (credentials: LoginCredentials) => {
@@ -21,4 +21,8 @@ const getTenants = async () => {
   return api.get("/tenants");
 };
 
-export { login, self, logout, getUsers, getTenants };
+const createUser = async (data: CreateUserType) => {
+  return api.post("/users", data);
+};
+
+export { login, self, logout, getUsers, getTenants, createUser };
