@@ -1,5 +1,5 @@
 import { RightOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Breadcrumb, Space, Table } from "antd";
 import { NavLink } from "react-router-dom";
 import { getUsers } from "../../http/api";
@@ -7,6 +7,8 @@ import type { TableProps } from "antd";
 import { User } from "../../store";
 import UserFilters from "./UserFilters";
 import UserDrawerForm from "./UserDrawerForm";
+import { useState } from "react";
+import { CONFIG } from "../../constants/constant";
 
 const columns: TableProps<User>["columns"] = [
   {
@@ -42,12 +44,18 @@ const columns: TableProps<User>["columns"] = [
 ];
 
 const Users = () => {
+  const [queryParam, setQueryParam] = useState({
+    currentPage: 1,
+    pageSize: CONFIG.pageSize,
+  });
+
   const { data: usersData, isLoading } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", queryParam],
     queryFn: async () => {
-      const res = await getUsers();
+      const res = await getUsers(queryParam.currentPage, queryParam.pageSize);
       return res.data;
     },
+    placeholderData: keepPreviousData,
   });
 
   return (
@@ -67,7 +75,24 @@ const Users = () => {
         <UserDrawerForm />
       </UserFilters>
       {isLoading && <div>Loading...</div>}
-      <Table columns={columns} dataSource={usersData?.result} rowKey={"_id"} />
+      <Table
+        pagination={{
+          total: usersData?.meta.totalDocuments,
+          current: queryParam.currentPage,
+          pageSize: queryParam.pageSize,
+          onChange: (page: number) => {
+            setQueryParam((prev) => {
+              return {
+                ...prev,
+                currentPage: page,
+              };
+            });
+          },
+        }}
+        columns={columns}
+        dataSource={usersData?.result}
+        rowKey={"_id"}
+      />
     </Space>
   );
 };

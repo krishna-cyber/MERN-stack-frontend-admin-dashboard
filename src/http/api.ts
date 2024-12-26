@@ -13,8 +13,8 @@ const logout = async () => {
   return await api.get("/auth/logout");
 };
 
-const getUsers = async () => {
-  return api.get("/users");
+const getUsers = async (page: number, pageSize: number = 10) => {
+  return api.get(`/users?currentPage=${page}&pageSize=${pageSize}`);
 };
 
 const getTenants = async () => {
