@@ -1,3 +1,3 @@
 export const CONFIG = {
-  pageSize: 10,
+  pageSize: 2,
 };

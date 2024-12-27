@@ -1,6 +1,6 @@
-import { RightOutlined } from "@ant-design/icons";
+import { LoadingOutlined, RightOutlined } from "@ant-design/icons";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Breadcrumb, Space, Table } from "antd";
+import { Breadcrumb, Flex, Space, Spin, Table } from "antd";
 import { NavLink } from "react-router-dom";
 import { getUsers } from "../../http/api";
 import type { TableProps } from "antd";
@@ -49,7 +49,12 @@ const Users = () => {
     pageSize: CONFIG.pageSize,
   });
 
-  const { data: usersData, isLoading } = useQuery({
+  const {
+    data: usersData,
+    isFetching,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["users", queryParam],
     queryFn: async () => {
       const res = await getUsers(queryParam.currentPage, queryParam.pageSize);
@@ -60,13 +65,20 @@ const Users = () => {
 
   return (
     <Space direction="vertical" size={"middle"} style={{ width: "100%" }}>
-      <Breadcrumb
-        separator={<RightOutlined />}
-        items={[
-          { title: <NavLink to={"/"}>Home</NavLink> },
-          { title: <NavLink to={"/users"}>Users</NavLink> },
-        ]}
-      />
+      <Flex justify="space-between">
+        <Breadcrumb
+          separator={<RightOutlined />}
+          items={[
+            { title: <NavLink to={"/"}>Home</NavLink> },
+            { title: <NavLink to={"/users"}>Users</NavLink> },
+          ]}
+        />
+        {isFetching && (
+          <Spin size="large" indicator={<LoadingOutlined spin />} />
+        )}
+        {isError && <div>{error.message}</div>}
+      </Flex>
+
       <UserFilters
         onFilterChange={(filterName: string, filterValue: string) => {
           console.log(filterName, filterValue);
@@ -74,7 +86,7 @@ const Users = () => {
       >
         <UserDrawerForm />
       </UserFilters>
-      {isLoading && <div>Loading...</div>}
+
       <Table
         pagination={{
           total: usersData?.meta.totalDocuments,
