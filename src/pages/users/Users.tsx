@@ -99,8 +99,11 @@ const Users = () => {
   } = useQuery({
     queryKey: ["users", queryParam],
     queryFn: async () => {
-      console.log(queryParam);
-      const res = await getUsers(queryParam.currentPage, queryParam.pageSize);
+      const queryString = new URLSearchParams(
+        queryParam as unknown as string
+      ).toString();
+
+      const res = await getUsers(queryString);
       return res.data;
     },
     placeholderData: keepPreviousData,
@@ -113,16 +116,26 @@ const Users = () => {
     //todo
     //Filter out properly when value clears not state updated , fix this debug
 
-    const filteredFields = allFields
-      .map((item) => {
-        return { name: item.name[0], value: item.value };
+    const filteredFields = allFields.map((item) => {
+      return { name: item.name[0], value: item.value };
+    });
+
+    const validFields = filteredFields
+      .filter((field) => {
+        return !!field.value;
       })
-      .filter((fieldData) => {
-        return !!fieldData.value;
-      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .reduce((acc: { [key: string]: any }, obj) => {
+        acc[obj.name] = obj.value;
+        return acc;
+      }, {});
 
     setQueryParam((prev) => {
-      return { ...prev, ...filteredFields };
+      return {
+        currentPage: prev.currentPage,
+        pageSize: prev.pageSize,
+        ...validFields,
+      };
     });
   };
 
