@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  timeout: 500, // 500ms
+  // timeout: 500, // 500ms
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -31,7 +31,7 @@ api.interceptors.response.use(
 
     // const headers = { ...originalRequest.headers };
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error?.response?.status === 401 && !originalRequest._retry) {
       try {
         await refreshToken();
         originalRequest._retry = true;

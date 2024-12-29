@@ -18,4 +18,9 @@ interface CreateUserType {
   tenatId?: string;
 }
 
-export type { LoginCredentials, Tenant, CreateUserType };
+interface FieldData {
+  name: string[];
+  value?: string;
+}
+
+export type { LoginCredentials, Tenant, CreateUserType, FieldData };

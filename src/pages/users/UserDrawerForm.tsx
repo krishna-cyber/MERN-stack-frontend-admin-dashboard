@@ -2,28 +2,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, Space, theme } from "antd";
 import { useState } from "react";
 import UserForm from "./forms/UserForm";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser } from "../../http/api";
-import { CreateUserType } from "../../types";
 
 const UserDrawerForm = () => {
-  const queryClient = useQueryClient();
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [form] = Form.useForm();
-  const {
-    token: { colorBgLayout },
-  } = theme.useToken();
-
-  const { mutate: createUserMutate, isPending } = useMutation({
-    mutationKey: ["createUser"],
-    mutationFn: async (data: CreateUserType) => createUser(data),
-    onSuccess: () => {
-      form.resetFields();
-      setDrawerOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["users"], exact: true });
-    },
-  });
-
   return (
     <>
       <Button

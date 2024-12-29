@@ -1,14 +1,35 @@
-import { LoadingOutlined, RightOutlined } from "@ant-design/icons";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Breadcrumb, Flex, Space, Spin, Table } from "antd";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+
+import {
+  Breadcrumb,
+  Button,
+  Drawer,
+  Flex,
+  Form,
+  Space,
+  Spin,
+  Table,
+  theme,
+} from "antd";
 import { NavLink } from "react-router-dom";
-import { getUsers } from "../../http/api";
+import { createUser, getUsers } from "../../http/api";
 import type { TableProps } from "antd";
 import { User } from "../../store";
 import UserFilters from "./UserFilters";
-import UserDrawerForm from "./UserDrawerForm";
 import { useState } from "react";
 import { CONFIG } from "../../constants/constant";
+import { CreateUserType, FieldData } from "../../types";
+import UserForm from "./forms/UserForm";
 
 const columns: TableProps<User>["columns"] = [
   {
@@ -49,6 +70,27 @@ const Users = () => {
     pageSize: CONFIG.pageSize,
   });
 
+  const queryClient = useQueryClient();
+
+  const { mutate: createUserMutate, isPending } = useMutation({
+    mutationKey: ["createUser"],
+    mutationFn: async (data: CreateUserType) => createUser(data),
+    onSuccess: () => {
+      form.resetFields();
+      setDrawerOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["users"], exact: true });
+    },
+  });
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [form] = Form.useForm();
+
+  const [dataFilterForm] = Form.useForm();
+
+  const {
+    token: { colorBgLayout },
+  } = theme.useToken();
+
   const {
     data: usersData,
     isFetching,
@@ -57,11 +99,32 @@ const Users = () => {
   } = useQuery({
     queryKey: ["users", queryParam],
     queryFn: async () => {
+      console.log(queryParam);
       const res = await getUsers(queryParam.currentPage, queryParam.pageSize);
       return res.data;
     },
     placeholderData: keepPreviousData,
   });
+
+  const handleFilterChange = (
+    _changedFields: FieldData[],
+    allFields: FieldData[]
+  ) => {
+    //todo
+    //Filter out properly when value clears not state updated , fix this debug
+
+    const filteredFields = allFields
+      .map((item) => {
+        return { name: item.name[0], value: item.value };
+      })
+      .filter((fieldData) => {
+        return !!fieldData.value;
+      });
+
+    setQueryParam((prev) => {
+      return { ...prev, ...filteredFields };
+    });
+  };
 
   return (
     <Space direction="vertical" size={"middle"} style={{ width: "100%" }}>
@@ -79,13 +142,18 @@ const Users = () => {
         {isError && <div>{error.message}</div>}
       </Flex>
 
-      <UserFilters
-        onFilterChange={(filterName: string, filterValue: string) => {
-          console.log(filterName, filterValue);
-        }}
-      >
-        <UserDrawerForm />
-      </UserFilters>
+      <Form form={dataFilterForm} onFieldsChange={handleFilterChange}>
+        <UserFilters>
+          <Button
+            color={"primary"}
+            variant={"solid"}
+            onClick={() => setDrawerOpen(true)}
+            icon={<PlusOutlined />}
+          >
+            Add User
+          </Button>
+        </UserFilters>
+      </Form>
 
       <Table
         pagination={{
@@ -105,6 +173,46 @@ const Users = () => {
         dataSource={usersData?.result}
         rowKey={"_id"}
       />
+
+      <Drawer
+        styles={{ body: { background: colorBgLayout } }}
+        title="Create a new user"
+        open={drawerOpen}
+        width={700}
+        onClose={() => {
+          form.resetFields();
+          setDrawerOpen(false);
+        }}
+        destroyOnClose={true}
+        extra={
+          <Space size={"middle"}>
+            <Button
+              onClick={() => {
+                form.resetFields();
+                setDrawerOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              loading={isPending}
+              type="primary"
+              onClick={async () => {
+                await form.validateFields();
+                const formData = form.getFieldsValue();
+                delete formData.confirmPassword;
+                createUserMutate(formData);
+              }}
+            >
+              Submit
+            </Button>
+          </Space>
+        }
+      >
+        <Form form={form} layout="vertical">
+          <UserForm />
+        </Form>
+      </Drawer>
     </Space>
   );
 };
