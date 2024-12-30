@@ -5,8 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { self } from "./http/api";
 
 const App = () => {
-  // const { data, isLoading } = useGetSelf();
-
   const { data, isLoading } = useQuery({
     queryKey: ["self"],
     queryFn: self,

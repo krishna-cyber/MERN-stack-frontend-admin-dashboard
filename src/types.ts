@@ -23,4 +23,15 @@ interface FieldData {
   value?: string;
 }
 
-export type { LoginCredentials, Tenant, CreateUserType, FieldData };
+interface TenantCreateInfo {
+  name: string;
+  address: string;
+}
+
+export type {
+  LoginCredentials,
+  Tenant,
+  CreateUserType,
+  FieldData,
+  TenantCreateInfo,
+};

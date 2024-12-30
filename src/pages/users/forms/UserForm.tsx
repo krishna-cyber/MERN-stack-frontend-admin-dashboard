@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
-import { getTenants } from "../../../http/api";
+import { getTenantsList } from "../../../http/api";
 import { Tenant } from "../../../types";
 
 const UserForm = () => {
   const { data: tenants } = useQuery({
-    queryKey: ["tenants"],
+    queryKey: ["tenantsList"],
     queryFn: async () => {
-      const res = await getTenants();
+      const res = await getTenantsList();
       return res.data;
     },
   });
@@ -156,7 +156,7 @@ const UserForm = () => {
                 >
                   {tenants?.result.map((tenant: Tenant) => {
                     return (
-                      <Select.Option value={tenant._id}>
+                      <Select.Option key={tenant._id} value={tenant._id}>
                         {tenant.name}
                       </Select.Option>
                     );
