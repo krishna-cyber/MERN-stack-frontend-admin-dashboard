@@ -76,10 +76,13 @@ const Users = () => {
   const { mutate: createUserMutate, isPending } = useMutation({
     mutationKey: ["createUser"],
     mutationFn: async (data: CreateUserType) => createUser(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       form.resetFields();
+      await queryClient.invalidateQueries({
+        queryKey: ["users", queryParam],
+        exact: true,
+      });
       setDrawerOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["users"], exact: true });
     },
   });
 
