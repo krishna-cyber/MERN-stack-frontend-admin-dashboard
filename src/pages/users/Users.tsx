@@ -116,7 +116,7 @@ const Users = () => {
   const debounceSearchUpdate = useMemo(() => {
     return debounce((value: string | undefined) => {
       setQueryParam((prev) => {
-        return { ...prev, search: value };
+        return { ...prev, currentPage: 1, search: value };
       });
     }, 1000);
   }, []);
@@ -144,7 +144,7 @@ const Users = () => {
     } else {
       setQueryParam((prev) => {
         return {
-          currentPage: prev.currentPage,
+          currentPage: 1, // when request goes immedately state updated, current page must be 1 not the previous value
           pageSize: prev.pageSize,
           ...validFields,
         };
