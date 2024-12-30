@@ -70,6 +70,9 @@ const Users = () => {
     currentPage: 1,
     pageSize: CONFIG.pageSize,
   });
+  const [currentEditingUser, setCurrentEditingUser] = useState<boolean | null>(
+    null
+  );
 
   const queryClient = useQueryClient();
 
@@ -198,18 +201,40 @@ const Users = () => {
             return `Showing ${range[0]} - ${range[1]} of ${total}`;
           },
         }}
-        columns={columns}
+        columns={[
+          ...columns,
+          {
+            title: "Actions",
+            key: "actions",
+            render() {
+              return (
+                <Space>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      setCurrentEditingUser(true);
+                      setDrawerOpen(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </Space>
+              );
+            },
+          },
+        ]}
         dataSource={usersData?.result}
         rowKey={"_id"}
       />
 
       <Drawer
         styles={{ body: { background: colorBgLayout } }}
-        title="Create a new user"
+        title={currentEditingUser ? "Edit User" : "Create a new User"}
         open={drawerOpen}
         width={700}
         onClose={() => {
           form.resetFields();
+          setCurrentEditingUser(null);
           setDrawerOpen(false);
         }}
         destroyOnClose={true}
@@ -239,7 +264,7 @@ const Users = () => {
         }
       >
         <Form form={form} layout="vertical">
-          <UserForm />
+          <UserForm isEditing={!!currentEditingUser} />
         </Form>
       </Drawer>
     </Space>

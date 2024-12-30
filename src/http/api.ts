@@ -21,7 +21,7 @@ const getTenants = async (queryString: string) => {
   return api.get(`/tenants?${queryString}`);
 };
 const getTenantsList = async () => {
-  return api.get("/tenants/list");
+  return api.get("/tenants/lists");
 };
 
 const createUser = async (data: CreateUserType) => {
