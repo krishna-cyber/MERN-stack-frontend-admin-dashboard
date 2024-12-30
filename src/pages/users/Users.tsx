@@ -26,10 +26,11 @@ import { createUser, getUsers } from "../../http/api";
 import type { TableProps } from "antd";
 import { User } from "../../store";
 import UserFilters from "./UserFilters";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CONFIG } from "../../constants/constant";
 import { CreateUserType, FieldData } from "../../types";
 import UserForm from "./forms/UserForm";
+import { debounce } from "lodash";
 
 const columns: TableProps<User>["columns"] = [
   {
@@ -109,13 +110,18 @@ const Users = () => {
     placeholderData: keepPreviousData,
   });
 
+  const debounceSearchUpdate = useMemo(() => {
+    return debounce((value: string | undefined) => {
+      setQueryParam((prev) => {
+        return { ...prev, search: value };
+      });
+    }, 1000);
+  }, []);
+
   const handleFilterChange = (
     _changedFields: FieldData[],
     allFields: FieldData[]
   ) => {
-    //todo
-    //Filter out properly when value clears not state updated , fix this debug
-
     const filteredFields = allFields.map((item) => {
       return { name: item.name[0], value: item.value };
     });
@@ -130,13 +136,17 @@ const Users = () => {
         return acc;
       }, {});
 
-    setQueryParam((prev) => {
-      return {
-        currentPage: prev.currentPage,
-        pageSize: prev.pageSize,
-        ...validFields,
-      };
-    });
+    if (validFields.search) {
+      debounceSearchUpdate(validFields.search);
+    } else {
+      setQueryParam((prev) => {
+        return {
+          currentPage: prev.currentPage,
+          pageSize: prev.pageSize,
+          ...validFields,
+        };
+      });
+    }
   };
 
   return (
