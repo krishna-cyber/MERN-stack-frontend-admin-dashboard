@@ -194,6 +194,9 @@ const Users = () => {
               };
             });
           },
+          showTotal(total, range) {
+            return `Showing ${range[0]} - ${range[1]} of ${total}`;
+          },
         }}
         columns={columns}
         dataSource={usersData?.result}
