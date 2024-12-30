@@ -18,12 +18,13 @@ const { Text } = Typography;
 import logo from "../../assets/logo.jpg";
 
 import { useAuthStore } from "../../store";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { login, self } from "../../http/api";
 
 const LoginPage = () => {
-  // const { mutate, isError, error, isPending } = useUserLogin();
+  const location = useLocation();
+
   const { user } = useAuthStore();
 
   const getSelf = useQuery({
@@ -41,7 +42,9 @@ const LoginPage = () => {
   });
 
   if (user) {
-    return <Navigate to="/" replace={true} />;
+    const returnTo =
+      new URLSearchParams(location.search).get(`returnTo`) || "/";
+    return <Navigate to={`${returnTo}`} replace={true} />;
   }
 
   return (
