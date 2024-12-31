@@ -26,7 +26,7 @@ import { createUser, getUsers } from "../../http/api";
 import type { TableProps } from "antd";
 import { User } from "../../store";
 import UserFilters from "./UserFilters";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CONFIG } from "../../constants/constant";
 import { CreateUserType, FieldData } from "../../types";
 import UserForm from "./forms/UserForm";
@@ -70,9 +70,20 @@ const Users = () => {
     currentPage: 1,
     pageSize: CONFIG.pageSize,
   });
-  const [currentEditingUser, setCurrentEditingUser] = useState<boolean | null>(
+  const [currentEditingUser, setCurrentEditingUser] = useState<User | null>(
     null
   );
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [form] = Form.useForm();
+
+  const [dataFilterForm] = Form.useForm();
+
+  useEffect(() => {
+    if (currentEditingUser) {
+      setDrawerOpen(true);
+      form.setFieldsValue(currentEditingUser);
+    }
+  }, [currentEditingUser, form]);
 
   const queryClient = useQueryClient();
 
@@ -88,11 +99,6 @@ const Users = () => {
       setDrawerOpen(false);
     },
   });
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [form] = Form.useForm();
-
-  const [dataFilterForm] = Form.useForm();
 
   const {
     token: { colorBgLayout },
@@ -206,14 +212,14 @@ const Users = () => {
           {
             title: "Actions",
             key: "actions",
-            render() {
+
+            render(_value, record) {
               return (
                 <Space>
                   <Button
                     type="link"
                     onClick={() => {
-                      setCurrentEditingUser(true);
-                      setDrawerOpen(true);
+                      setCurrentEditingUser(record);
                     }}
                   >
                     Edit
