@@ -1,16 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
-import { getTenantsList } from "../../../http/api";
-import { Tenant } from "../../../types";
 
-const UserForm = ({ isEditing = false }: { isEditing: boolean }) => {
-  const { data: tenants } = useQuery({
-    queryKey: ["tenantsList"],
-    queryFn: async () => {
-      const res = await getTenantsList();
-      return res.data;
-    },
-  });
+const UserForm = ({
+  isEditing = false,
+  children,
+}: {
+  isEditing: boolean;
+  children: React.ReactNode;
+}) => {
   return (
     <>
       <Space direction="vertical" size={"middle"}>
@@ -148,24 +144,8 @@ const UserForm = ({ isEditing = false }: { isEditing: boolean }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item hasFeedback label="Resturants" name="tenantId">
-                <Select
-                  allowClear
-                  style={{ width: "100%" }}
-                  onChange={() => {}}
-                  placeholder="Resturants"
-                >
-                  {tenants?.result.map((tenant: Tenant) => {
-                    return (
-                      <Select.Option key={tenant._id} value={tenant._id}>
-                        {tenant.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
+
+            {children}
           </Row>
         </Card>
       </Space>

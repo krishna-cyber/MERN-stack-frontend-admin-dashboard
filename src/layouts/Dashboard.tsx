@@ -36,12 +36,6 @@ function getMenuItems(role: string) {
     },
 
     {
-      key: "/tenants",
-      label: <NavLink to={"/tenants"}>Resturant</NavLink>,
-      icon: <Icon component={ResturantIcon} />,
-      priority: 3,
-    },
-    {
       key: "/products",
       label: <NavLink to={"/products"}>Products</NavLink>,
       icon: <ProductOutlined />,
@@ -63,6 +57,12 @@ function getMenuItems(role: string) {
         label: <NavLink to={"/users"}>Users</NavLink>,
         icon: <UserOutlined />,
         priority: 2,
+      },
+      {
+        key: "/tenants",
+        label: <NavLink to={"/tenants"}>Resturant</NavLink>,
+        icon: <Icon component={ResturantIcon} />,
+        priority: 3,
       },
     ].sort((a, b) => a.priority - b.priority);
 
@@ -150,7 +150,7 @@ const Dashboard = () => {
           >
             <Tag color="success">
               <Badge status="success" style={{ paddingRight: 4 }} />
-              Global
+              {user.role == "admin" ? "Global" : user?.tenantId?.address}
             </Tag>
             <Space size={40}>
               <Badge dot={true}>

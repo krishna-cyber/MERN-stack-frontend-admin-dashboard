@@ -20,8 +20,13 @@ const getUsers = async (queryString: string) => {
 const getTenants = async (queryString: string) => {
   return api.get(`/tenants?${queryString}`);
 };
+
 const getTenantsList = async () => {
   return api.get("/tenants/lists");
+};
+
+const updateUser = async (id: string, data: CreateUserType) => {
+  return api.patch(`/users/${id}`, data);
 };
 
 const createUser = async (data: CreateUserType) => {
@@ -37,6 +42,7 @@ export {
   logout,
   getUsers,
   getTenants,
+  updateUser,
   createUser,
   createResturant,
   getTenantsList,

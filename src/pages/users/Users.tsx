@@ -22,7 +22,7 @@ import {
   theme,
 } from "antd";
 import { NavLink } from "react-router-dom";
-import { createUser, getUsers } from "../../http/api";
+import { createUser, getUsers, updateUser } from "../../http/api";
 import type { TableProps } from "antd";
 import { User } from "../../store";
 import UserFilters from "./UserFilters";
@@ -31,6 +31,7 @@ import { CONFIG } from "../../constants/constant";
 import { CreateUserType, FieldData } from "../../types";
 import UserForm from "./forms/UserForm";
 import { debounce } from "lodash";
+import TenantSelectForm from "./forms/TenantSelectForm";
 
 const columns: TableProps<User>["columns"] = [
   {
@@ -76,6 +77,8 @@ const Users = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [form] = Form.useForm();
 
+  const selectedRole = Form.useWatch("role", form);
+
   const [dataFilterForm] = Form.useForm();
 
   useEffect(() => {
@@ -97,6 +100,20 @@ const Users = () => {
         exact: true,
       });
       setDrawerOpen(false);
+    },
+  });
+
+  const { mutate: updateUserMutate } = useMutation({
+    mutationKey: ["updateUser"],
+    mutationFn: async ({ id, data }: { id: string; data: CreateUserType }) =>
+      updateUser(id, data),
+    onSuccess: async () => {
+      form.resetFields();
+      setDrawerOpen(false);
+      await queryClient.invalidateQueries({
+        queryKey: ["users", queryParam],
+        exact: true,
+      });
     },
   });
 
@@ -260,8 +277,16 @@ const Users = () => {
               onClick={async () => {
                 await form.validateFields();
                 const formData = form.getFieldsValue();
-                delete formData.confirmPassword;
-                createUserMutate(formData);
+                if (currentEditingUser) {
+                  updateUserMutate({
+                    id: currentEditingUser._id,
+                    data: formData,
+                  });
+                } else {
+                  delete formData.confirmPassword;
+                  createUserMutate(formData);
+                }
+                setCurrentEditingUser(null);
               }}
             >
               Submit
@@ -270,7 +295,9 @@ const Users = () => {
         }
       >
         <Form form={form} layout="vertical">
-          <UserForm isEditing={!!currentEditingUser} />
+          <UserForm isEditing={!!currentEditingUser}>
+            {selectedRole == "manager" && <TenantSelectForm />}
+          </UserForm>
         </Form>
       </Drawer>
     </Space>
