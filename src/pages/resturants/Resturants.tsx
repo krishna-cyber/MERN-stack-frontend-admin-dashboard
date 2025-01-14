@@ -126,7 +126,7 @@ const Resturants = () => {
       <Breadcrumb
         separator={<RightOutlined />}
         items={[
-          { title: <NavLink to={"/"}>Home</NavLink> },
+          { title: <NavLink to={"/"}>Dashboard</NavLink> },
           { title: <NavLink to={"/tenants"}>Resturants</NavLink> },
         ]}
       />
