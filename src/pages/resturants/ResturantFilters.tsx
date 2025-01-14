@@ -9,7 +9,12 @@ const ResturantFilters = ({ children }: ResturantFiltersProps) => {
     <Card>
       <Row justify={"space-between"}>
         <Col span={8}>
-          <Form.Item name={"search"}>
+          <Form.Item
+            style={{
+              margin: 0,
+            }}
+            name={"search"}
+          >
             <Input.Search allowClear placeholder="search" />
           </Form.Item>
         </Col>

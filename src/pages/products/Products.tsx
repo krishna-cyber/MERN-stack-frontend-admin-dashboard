@@ -1,17 +1,38 @@
-import { RightOutlined } from "@ant-design/icons";
-import { Breadcrumb, Space } from "antd";
+import { PlusOutlined, RightOutlined } from "@ant-design/icons";
+import { Breadcrumb, Button, Form, Flex, Space } from "antd";
 import { NavLink } from "react-router-dom";
+import ProductFilters from "./ProductFilters";
 
 const Products = () => {
+  const [dataFilterForm] = Form.useForm();
+
   return (
     <Space direction="vertical" size={"middle"} style={{ width: "100%" }}>
-      <Breadcrumb
-        separator={<RightOutlined />}
-        items={[
-          { title: <NavLink to={"/"}>Dashboard</NavLink> },
-          { title: <NavLink to={"/products"}>Products</NavLink> },
-        ]}
-      />
+      <Flex justify="space-between">
+        <Breadcrumb
+          separator={<RightOutlined />}
+          items={[
+            { title: <NavLink to={"/"}>Dashboard</NavLink> },
+            { title: <NavLink to={"/products"}>Products</NavLink> },
+          ]}
+        />
+        {/* {isFetching && (
+          <Spin size="large" indicator={<LoadingOutlined spin />} />
+        )}
+        {isError && <div>{error.message}</div>} */}
+      </Flex>
+      <Form form={dataFilterForm} onFieldsChange={() => {}}>
+        <ProductFilters>
+          <Button
+            color={"primary"}
+            variant={"solid"}
+            onClick={() => {}}
+            icon={<PlusOutlined />}
+          >
+            Add Product
+          </Button>
+        </ProductFilters>
+      </Form>
     </Space>
   );
 };
