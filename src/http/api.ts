@@ -1,41 +1,37 @@
+import { GATEWAY } from "../constants/constant";
 import { CreateUserType, LoginCredentials, TenantCreateInfo } from "../types";
 import api from "./axiosInstance";
 
-const login = async (credentials: LoginCredentials) => {
-  return api.post("/auth/login", credentials);
-};
+const login = async (credentials: LoginCredentials) =>
+  api.post(`${GATEWAY.AUTH_SERVICE}/auth/login`, credentials);
 
-const self = async () => {
-  return api.get("/auth/self");
-};
+const self = async () => api.get(`${GATEWAY.AUTH_SERVICE}/auth/self`);
 
-const logout = async () => {
-  return await api.get("/auth/logout");
-};
+const logout = async () => await api.get(`${GATEWAY.AUTH_SERVICE}/auth/logout`);
 
-const getUsers = async (queryString: string) => {
-  return api.get(`/users?${queryString}`);
-};
+const getUsers = async (queryString: string) =>
+  api.get(`${GATEWAY.AUTH_SERVICE}/users?${queryString}`);
 
-const getTenants = async (queryString: string) => {
-  return api.get(`/tenants?${queryString}`);
-};
+const getTenants = async (queryString: string) =>
+  api.get(`${GATEWAY.AUTH_SERVICE}/tenants?${queryString}`);
 
-const getTenantsList = async () => {
-  return api.get("/tenants/lists");
-};
+const getTenantsList = async () =>
+  api.get(`${GATEWAY.AUTH_SERVICE}/tenants/lists`);
 
-const updateUser = async (id: string, data: CreateUserType) => {
-  return api.patch(`/users/${id}`, data);
-};
+const updateUser = async (id: string, data: CreateUserType) =>
+  api.patch(`${GATEWAY.AUTH_SERVICE}/users/${id}`, data);
 
-const createUser = async (data: CreateUserType) => {
-  return api.post("/users", data);
-};
+const createUser = async (data: CreateUserType) =>
+  api.post(`${GATEWAY.AUTH_SERVICE}/users`, data);
 
-const createResturant = async (data: TenantCreateInfo) => {
-  return await api.post("/tenants", data);
-};
+const createResturant = async (data: TenantCreateInfo) =>
+  await api.post(`${GATEWAY.AUTH_SERVICE}/tenants`, data);
+
+// Category service
+
+const getCategoryList = async () =>
+  api.get(`${GATEWAY.CATALOG_SERVICE}/category`);
+
 export {
   login,
   self,
@@ -46,4 +42,5 @@ export {
   createUser,
   createResturant,
   getTenantsList,
+  getCategoryList,
 };

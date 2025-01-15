@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GATEWAY } from "../constants/constant";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -12,7 +13,7 @@ const api = axios.create({
 
 const refreshToken = async () => {
   return axios.post(
-    `${import.meta.env.VITE_API_URL}/auth/refresh`,
+    `${import.meta.env.VITE_API_URL}/${GATEWAY.AUTH_SERVICE}/auth/refresh`,
     {},
     { withCredentials: true }
   );

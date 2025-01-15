@@ -28,6 +28,11 @@ interface TenantCreateInfo {
   address: string;
 }
 
+export interface Category {
+  _id: string;
+  name: string;
+}
+
 export type {
   LoginCredentials,
   Tenant,

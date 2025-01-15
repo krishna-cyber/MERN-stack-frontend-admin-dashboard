@@ -16,10 +16,6 @@ const Products = () => {
             { title: <NavLink to={"/products"}>Products</NavLink> },
           ]}
         />
-        {/* {isFetching && (
-          <Spin size="large" indicator={<LoadingOutlined spin />} />
-        )}
-        {isError && <div>{error.message}</div>} */}
       </Flex>
       <Form form={dataFilterForm} onFieldsChange={() => {}}>
         <ProductFilters>
