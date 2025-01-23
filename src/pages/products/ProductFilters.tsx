@@ -24,8 +24,6 @@ const ProductFilters = ({ children }: ProductFilterInterface) => {
     },
   });
 
-  console.log(categoryList);
-
   return (
     <Card
       style={{
