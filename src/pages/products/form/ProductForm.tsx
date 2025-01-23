@@ -12,6 +12,8 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
       return res.data;
     },
   });
+
+  const selectedField = Form.useWatch("categoryId");
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={"middle"}>
       <Card
@@ -32,7 +34,7 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
               label="Product Name"
               name="name"
             >
-              <Input size="large" allowClear />
+              <Input allowClear />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -44,7 +46,6 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
               label="Categories"
             >
               <Select
-                size="large"
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Categories"
@@ -92,7 +93,7 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
                 ]}
                 name="password"
               >
-                <Input.Password size="large" allowClear />
+                <Input.Password allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -120,12 +121,16 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
                 ]}
                 name="confirmPassword"
               >
-                <Input.Password size="large" allowClear />
+                <Input.Password allowClear />
               </Form.Item>
             </Col>
           </Row>
         </Card>
       )} */}
+
+      {selectedField && <div>Price Attributes...</div>}
+
+      {selectedField && <div>Other Attributes...</div>}
 
       <Card size="small" title="Image Upload" style={{ width: "100%" }}>
         <Form.Item
@@ -136,7 +141,6 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
               message: "Product image is required",
             },
           ]}
-          label="Images"
           name="image"
         >
           {children}
