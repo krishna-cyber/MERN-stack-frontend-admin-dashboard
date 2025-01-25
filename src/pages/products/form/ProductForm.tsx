@@ -3,6 +3,8 @@ import { Card, Col, Form, Input, Row, Select, Space } from "antd";
 import { ReactNode } from "react";
 import { getCategoryList, getTenantsList } from "../../../http/api";
 import { Category, Tenant } from "../../../types";
+import PricingSectionForm from "./PricingSectionForm";
+import AttributesSectionForm from "./AttributesSectionForm";
 
 //Todo:
 //pRODUCT FORM complete
@@ -175,10 +177,14 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
       </Card>
 
       {/* Todo */}
-      <Card>{selectedField && <div>Price Attributes...</div>}</Card>
+      {selectedField && (
+        <PricingSectionForm selectedCategoryId={selectedField} />
+      )}
 
       {/* Todo */}
-      <Card> {selectedField && <div>Other Attributes...</div>}</Card>
+      {selectedField && (
+        <AttributesSectionForm selectedCategoryId={selectedField} />
+      )}
     </Space>
   );
 };

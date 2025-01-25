@@ -1,7 +1,11 @@
-import React from "react";
+import { Card } from "antd";
 
-const AttributesSectionForm = () => {
-  return <div>AttributesSectionForm</div>;
+const AttributesSectionForm = ({
+  selectedCategoryId,
+}: {
+  selectedCategoryId: string;
+}) => {
+  return <Card>{selectedCategoryId}</Card>;
 };
 
 export default AttributesSectionForm;

@@ -28,9 +28,20 @@ interface TenantCreateInfo {
   address: string;
 }
 
+interface PriceConfiguration {
+  [key: string]: {
+    priceType: "base" | "additional";
+    avilableOptions: string[];
+  };
+}
+
 export interface Category {
   _id: string;
   name: string;
+  priceConfiguration: PriceConfiguration;
+  attributes: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type {

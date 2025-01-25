@@ -28,10 +28,11 @@ const createResturant = async (data: TenantCreateInfo) =>
   await api.post(`${GATEWAY.AUTH_SERVICE}/tenants`, data);
 
 // Category service
-
 const getCategoryList = async () =>
   api.get(`${GATEWAY.CATALOG_SERVICE}/category`);
 
+const getSingleCategoryById = async (categoryId: string) =>
+  api.get(`${GATEWAY.CATALOG_SERVICE}/category/${categoryId}`);
 export {
   login,
   self,
@@ -43,4 +44,5 @@ export {
   createResturant,
   getTenantsList,
   getCategoryList,
+  getSingleCategoryById,
 };
