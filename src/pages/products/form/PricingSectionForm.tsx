@@ -34,9 +34,9 @@ const PricingSectionForm = ({ categoryId }: CategoryId) => {
 
             <Row style={{ marginTop: "0.2rem" }} gutter={10}>
               {category?.priceConfiguration[priceKey].avilableOptions.map(
-                (value) => {
+                (option) => {
                   return (
-                    <Col span={8} key={value}>
+                    <Col span={8} key={option}>
                       <Form.Item
                         rules={[
                           { required: true, message: "Price must be required" },
@@ -50,8 +50,8 @@ const PricingSectionForm = ({ categoryId }: CategoryId) => {
                           },
                         ]}
                         layout="horizontal"
-                        label={_.upperFirst(value)}
-                        name={[`priceConfiguration`, priceKey, value]}
+                        label={_.upperFirst(option)}
+                        name={[`priceConfiguration`, priceKey, option]}
                       >
                         <InputNumber defaultValue={0} addonAfter={"रु"} />
                       </Form.Item>
