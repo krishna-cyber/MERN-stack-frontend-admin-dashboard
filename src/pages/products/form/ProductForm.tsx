@@ -1,14 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
 import { ReactNode } from "react";
-import { getCategoryList } from "../../../http/api";
-import { Category } from "../../../types";
+import { getCategoryList, getTenantsList } from "../../../http/api";
+import { Category, Tenant } from "../../../types";
 
+//Todo:
+//pRODUCT FORM complete
+//eDIT AND update reusable form
 const ProductForm = ({ children }: { children: ReactNode }) => {
   const { data: categoryList } = useQuery({
     queryKey: ["categoryList"],
     queryFn: async () => {
       const res = await getCategoryList();
+      return res.data;
+    },
+  });
+
+  const { data: tenants } = useQuery({
+    queryKey: ["tenantsList"],
+    queryFn: async () => {
+      const res = await getTenantsList();
       return res.data;
     },
   });
@@ -73,7 +84,7 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
           </Col>
         </Row>
       </Card>
-
+      {/* Todo */}
       {/* {!isEditing && (
         <Card
           size="small"
@@ -128,12 +139,9 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
         </Card>
       )} */}
 
-      {selectedField && <div>Price Attributes...</div>}
-
-      {selectedField && <div>Other Attributes...</div>}
-
       <Card size="small" title="Image Upload" style={{ width: "100%" }}>
         <Form.Item
+          style={{ margin: 0 }}
           hasFeedback
           rules={[
             {
@@ -146,6 +154,31 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
           {children}
         </Form.Item>
       </Card>
+
+      <Card size="small" title="Tenant info" style={{ width: "100%" }}>
+        <Form.Item name="tenantId" style={{ margin: 0 }}>
+          <Select
+            allowClear
+            style={{ width: "100%" }}
+            onChange={() => {}}
+            placeholder="Resturants"
+          >
+            {tenants?.result.map((tenant: Tenant) => {
+              return (
+                <Select.Option key={tenant._id} value={tenant._id}>
+                  {tenant.name}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        </Form.Item>
+      </Card>
+
+      {/* Todo */}
+      <Card>{selectedField && <div>Price Attributes...</div>}</Card>
+
+      {/* Todo */}
+      <Card> {selectedField && <div>Other Attributes...</div>}</Card>
     </Space>
   );
 };

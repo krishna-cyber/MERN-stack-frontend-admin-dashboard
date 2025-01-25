@@ -72,7 +72,6 @@ const Products = () => {
         <Form form={form} layout="vertical">
           <ProductForm>
             <UploadImage />
-            {/* {selectedRole == "manager" && <TenantSelectForm />} */}
           </ProductForm>
         </Form>
       </Drawer>
