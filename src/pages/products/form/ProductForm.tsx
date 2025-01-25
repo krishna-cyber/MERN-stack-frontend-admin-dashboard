@@ -86,60 +86,6 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
           </Col>
         </Row>
       </Card>
-      {/* Todo */}
-      {/* {!isEditing && (
-        <Card
-          size="small"
-          title="Security Information"
-          style={{ width: "100%" }}
-        >
-          <Row gutter={20}>
-            <Col span={12}>
-              <Form.Item
-                hasFeedback
-                label="Password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Password is required",
-                  },
-                ]}
-                name="password"
-              >
-                <Input.Password allowClear />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                hasFeedback
-                label="Confirm Password"
-                dependencies={["password"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Confirm Password is required",
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error(
-                          "The new password that you entered do not match!"
-                        )
-                      );
-                    },
-                  }),
-                ]}
-                name="confirmPassword"
-              >
-                <Input.Password allowClear />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Card>
-      )} */}
 
       <Card size="small" title="Image Upload" style={{ width: "100%" }}>
         <Form.Item
@@ -156,6 +102,10 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
           {children}
         </Form.Item>
       </Card>
+
+      {selectedField && <PricingSectionForm categoryId={selectedField} />}
+
+      {selectedField && <AttributesSectionForm categoryId={selectedField} />}
 
       <Card size="small" title="Tenant info" style={{ width: "100%" }}>
         <Form.Item name="tenantId" style={{ margin: 0 }}>
@@ -175,16 +125,6 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
           </Select>
         </Form.Item>
       </Card>
-
-      {/* Todo */}
-      {selectedField && (
-        <PricingSectionForm selectedCategoryId={selectedField} />
-      )}
-
-      {/* Todo */}
-      {selectedField && (
-        <AttributesSectionForm selectedCategoryId={selectedField} />
-      )}
     </Space>
   );
 };

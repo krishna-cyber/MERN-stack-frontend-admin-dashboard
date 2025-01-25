@@ -28,6 +28,13 @@ interface TenantCreateInfo {
   address: string;
 }
 
+interface AttributeSchema {
+  name: string;
+  widgetType: "switch" | "radio";
+  defaultValue: string;
+  avilableOptions: string[];
+}
+
 interface PriceConfiguration {
   [key: string]: {
     priceType: "base" | "additional";
@@ -39,7 +46,7 @@ export interface Category {
   _id: string;
   name: string;
   priceConfiguration: PriceConfiguration;
-  attributes: string;
+  attributes: AttributeSchema[];
   createdAt: string;
   updatedAt: string;
 }

@@ -4,30 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { Category } from "../../../types";
 import _ from "lodash";
 
-const PricingSectionForm = ({
-  selectedCategoryId,
-}: {
-  selectedCategoryId: string;
-}) => {
+interface CategoryId {
+  categoryId: string;
+}
+
+const PricingSectionForm = ({ categoryId }: CategoryId) => {
   const { data: category } = useQuery({
-    queryKey: ["category", { selectedCategoryId }],
+    queryKey: ["category", { categoryId }],
     queryFn: async () => {
-      const res = await getSingleCategoryById(selectedCategoryId);
+      const res = await getSingleCategoryById(categoryId);
       return res.data?.result as Category;
     },
   });
 
   const pricingKeys = _.keys(category?.priceConfiguration); // ["key1","key2","key3"]
-
-  const pricingData: {
-    base: { priceType: string; availableOptions: string[] }[];
-    additional: { priceType: string; availableOptions: string[] }[];
-  } = {
-    base: [],
-    additional: [],
-  };
-
-  console.log(pricingData);
 
   return (
     <Card title={`Price configuration`}>
