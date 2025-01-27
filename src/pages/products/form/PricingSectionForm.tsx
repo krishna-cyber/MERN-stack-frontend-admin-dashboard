@@ -53,7 +53,7 @@ const PricingSectionForm = ({ categoryId }: CategoryId) => {
                         label={_.upperFirst(option)}
                         name={[`priceConfiguration`, priceKey, option]}
                       >
-                        <InputNumber defaultValue={0} addonAfter={"रु"} />
+                        <InputNumber addonAfter={"रु"} />
                       </Form.Item>
                     </Col>
                   );

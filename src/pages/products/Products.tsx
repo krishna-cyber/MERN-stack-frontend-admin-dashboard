@@ -16,6 +16,8 @@ const Products = () => {
 
   const handleFormSubmit = () => {
     console.log(`submitting...`);
+    const formValues = form.getFieldsValue();
+    console.log(formValues);
   };
 
   return (
