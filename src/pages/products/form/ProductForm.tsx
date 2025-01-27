@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Form, Input, Row, Select, Space } from "antd";
+import { Card, Col, Form, Input, Row, Select, Space, Switch } from "antd";
 import { ReactNode } from "react";
 import { getCategoryList, getTenantsList } from "../../../http/api";
 import { Category, Tenant } from "../../../types";
@@ -56,6 +56,12 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
               style={{
                 margin: 0,
               }}
+              rules={[
+                {
+                  required: true,
+                  message: "Select category of product",
+                },
+              ]}
               label="Categories"
             >
               <Select
@@ -80,6 +86,12 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
                 margin: 0,
               }}
               label="Product Description"
+              rules={[
+                {
+                  required: true,
+                  message: "Description of product is required",
+                },
+              ]}
             >
               <Input.TextArea rows={2} />
             </Form.Item>
@@ -87,28 +99,22 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
         </Row>
       </Card>
 
-      <Card size="small" title="Image Upload" style={{ width: "100%" }}>
-        <Form.Item
-          style={{ margin: 0 }}
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: "Product image is required",
-            },
-          ]}
-          name="image"
-        >
-          {children}
-        </Form.Item>
+      <Card
+        size="small"
+        title="Image Upload (Only 4)"
+        style={{ width: "100%" }}
+      >
+        {children}
       </Card>
 
-      {selectedField && <PricingSectionForm categoryId={selectedField} />}
-
-      {selectedField && <AttributesSectionForm categoryId={selectedField} />}
-
       <Card size="small" title="Tenant info" style={{ width: "100%" }}>
-        <Form.Item name="tenantId" style={{ margin: 0 }}>
+        <Form.Item
+          name="tenantId"
+          label="Resturant info"
+          style={{ margin: 0 }}
+          layout="horizontal"
+          rules={[{ required: true, message: "Select Resturant" }]}
+        >
           <Select
             allowClear
             style={{ width: "100%" }}
@@ -123,6 +129,19 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
               );
             })}
           </Select>
+        </Form.Item>
+      </Card>
+      {selectedField && <PricingSectionForm categoryId={selectedField} />}
+
+      {selectedField && <AttributesSectionForm categoryId={selectedField} />}
+      <Card size="small" title="Other properties" style={{ width: "100%" }}>
+        <Form.Item
+          name="isPublish"
+          style={{ margin: 0 }}
+          label="Publish"
+          layout="horizontal"
+        >
+          <Switch defaultChecked checkedChildren="yes" unCheckedChildren="no" />
         </Form.Item>
       </Card>
     </Space>

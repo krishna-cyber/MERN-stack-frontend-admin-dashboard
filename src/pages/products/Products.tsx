@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import ProductFilters from "./ProductFilters";
 import { useState } from "react";
 import ProductForm from "./form/ProductForm";
-import UploadImage from "./form/UploadImage";
+import UploadImageHandle from "./form/UploadImage";
 
 const Products = () => {
   const [dataFilterForm] = Form.useForm();
@@ -14,8 +14,9 @@ const Products = () => {
     token: { colorBgLayout },
   } = theme.useToken();
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
     console.log(`submitting...`);
+    await form.validateFields();
     const formValues = form.getFieldsValue();
     console.log(formValues);
   };
@@ -73,7 +74,7 @@ const Products = () => {
       >
         <Form form={form} layout="vertical">
           <ProductForm>
-            <UploadImage />
+            <UploadImageHandle />
           </ProductForm>
         </Form>
       </Drawer>

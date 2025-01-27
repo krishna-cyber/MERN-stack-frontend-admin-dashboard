@@ -1,7 +1,7 @@
 //Todo Upload component
 import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload } from "antd";
+import { Form, Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -14,7 +14,15 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const UploadImage: React.FC = () => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const normFile = (e: any) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
+
+const UploadImageHandle: React.FC = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -39,15 +47,29 @@ const UploadImage: React.FC = () => {
   );
   return (
     <>
-      <Upload
+      <Form.Item
+        style={{ margin: 0 }}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Product image is required",
+          },
+        ]}
         name="image"
-        listType="picture-card"
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
       >
-        {uploadButton}
-      </Upload>
+        <Upload
+          name="image"
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={handlePreview}
+          onChange={handleChange}
+        >
+          {fileList.length < 4 ? uploadButton : null}
+        </Upload>
+      </Form.Item>
       {previewImage && (
         <Image
           wrapperStyle={{ display: "none" }}
@@ -63,4 +85,4 @@ const UploadImage: React.FC = () => {
   );
 };
 
-export default UploadImage;
+export default UploadImageHandle;
