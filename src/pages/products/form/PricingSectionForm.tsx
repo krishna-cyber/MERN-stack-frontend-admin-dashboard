@@ -51,7 +51,12 @@ const PricingSectionForm = ({ categoryId }: CategoryId) => {
                         ]}
                         layout="horizontal"
                         label={_.upperFirst(option)}
-                        name={[`priceConfiguration`, priceKey, option]}
+                        name={[
+                          `priceConfiguration`,
+                          priceKey,
+                          "avilableOptions",
+                          option,
+                        ]}
                       >
                         <InputNumber addonAfter={"रु"} />
                       </Form.Item>

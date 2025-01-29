@@ -56,16 +56,17 @@ const UploadImageHandle: React.FC = () => {
             message: "Product image is required",
           },
         ]}
-        name="image"
+        name="images"
         valuePropName="fileList"
         getValueFromEvent={normFile}
       >
         <Upload
-          name="image"
+          name="images"
           listType="picture-card"
           fileList={fileList}
           onPreview={handlePreview}
           onChange={handleChange}
+          beforeUpload={() => false}
         >
           {fileList.length < 4 ? uploadButton : null}
         </Upload>

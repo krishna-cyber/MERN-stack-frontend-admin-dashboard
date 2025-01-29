@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 interface LoginCredentials {
   email: string;
   password: string;
@@ -49,6 +51,17 @@ export interface Category {
   attributes: AttributeSchema[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ProductFormData {
+  name: string;
+  categoryId: string;
+  description: string;
+  images: UploadFile[];
+  priceConfiguration: string;
+  attributes: string;
+  isPublish: boolean;
+  tenantId: string;
 }
 
 export type {

@@ -1,5 +1,10 @@
 import { GATEWAY } from "../constants/constant";
-import { CreateUserType, LoginCredentials, TenantCreateInfo } from "../types";
+import {
+  CreateUserType,
+  LoginCredentials,
+  ProductFormData,
+  TenantCreateInfo,
+} from "../types";
 import api from "./axiosInstance";
 
 const login = async (credentials: LoginCredentials) =>
@@ -33,6 +38,16 @@ const getCategoryList = async () =>
 
 const getSingleCategoryById = async (categoryId: string) =>
   api.get(`${GATEWAY.CATALOG_SERVICE}/category/${categoryId}`);
+
+const createProduct = async (data: ProductFormData) => {
+  JSON.stringify(data);
+  return api.post(`${GATEWAY.CATALOG_SERVICE}/product`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export {
   login,
   self,
@@ -45,4 +60,5 @@ export {
   getTenantsList,
   getCategoryList,
   getSingleCategoryById,
+  createProduct,
 };

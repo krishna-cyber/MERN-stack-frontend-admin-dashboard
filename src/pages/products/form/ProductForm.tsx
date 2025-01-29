@@ -141,7 +141,7 @@ const ProductForm = ({ children }: { children: ReactNode }) => {
           label="Publish"
           layout="horizontal"
         >
-          <Switch defaultChecked checkedChildren="yes" unCheckedChildren="no" />
+          <Switch checkedChildren="yes" unCheckedChildren="no" />
         </Form.Item>
       </Card>
     </Space>

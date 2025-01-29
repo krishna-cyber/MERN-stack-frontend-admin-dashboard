@@ -5,8 +5,13 @@ import ProductFilters from "./ProductFilters";
 import { useState } from "react";
 import ProductForm from "./form/ProductForm";
 import UploadImageHandle from "./form/UploadImage";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createProduct } from "../../http/api";
+import { ProductFormData } from "../../types";
+import { RcFile } from "antd/es/upload";
 
 const Products = () => {
+  const queryClient = useQueryClient();
   const [dataFilterForm] = Form.useForm();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [form] = Form.useForm();
@@ -14,11 +19,34 @@ const Products = () => {
     token: { colorBgLayout },
   } = theme.useToken();
 
+  const { mutate: productMutation, isPending } = useMutation({
+    mutationKey: ["product"],
+    mutationFn: async (data: ProductFormData) => {
+      return createProduct(data).then((res) => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
+      setDrawerOpen(false);
+    },
+  });
+
   const handleFormSubmit = async () => {
-    console.log(`submitting...`);
     await form.validateFields();
-    const formValues = form.getFieldsValue();
-    console.log(formValues);
+    const formValues: ProductFormData = form.getFieldsValue();
+
+    const submittingValue = {
+      ...formValues,
+      priceConfiguration: JSON.stringify(formValues.priceConfiguration),
+      attributes: JSON.stringify(formValues.attributes),
+      isPublish: !!formValues.isPublish,
+      images: formValues.images.map((file) => {
+        return file.originFileObj as RcFile;
+      }),
+    };
+
+    productMutation(submittingValue);
   };
 
   return (
@@ -66,7 +94,11 @@ const Products = () => {
             >
               Cancel
             </Button>
-            <Button type="primary" onClick={handleFormSubmit}>
+            <Button
+              loading={isPending}
+              type="primary"
+              onClick={handleFormSubmit}
+            >
               Submit
             </Button>
           </Space>

@@ -22,6 +22,8 @@ const AttributesSectionForm = ({ categoryId }: CategoryId) => {
         {category?.attributes.map((attribute) => {
           return (
             <Form.Item
+              initialValue={attribute.defaultValue}
+              name={[`attributes`, attribute.name]}
               colon={false}
               key={attribute.name}
               label={attribute.name}
@@ -34,7 +36,7 @@ const AttributesSectionForm = ({ categoryId }: CategoryId) => {
                   defaultChecked
                 />
               ) : (
-                <Radio.Group defaultValue={attribute.defaultValue}>
+                <Radio.Group value={attribute.defaultValue}>
                   {attribute.avilableOptions.map((option) => {
                     return (
                       <Radio.Button value={option} key={option}>
