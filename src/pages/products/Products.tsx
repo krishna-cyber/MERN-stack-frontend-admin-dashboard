@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { NavLink } from "react-router-dom";
 import ProductFilters from "./ProductFilters";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ProductForm from "./form/ProductForm";
 import UploadImageHandle from "./form/UploadImage";
 import {
@@ -25,10 +25,11 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { createProduct, fetchProduct } from "../../http/api";
-import { Product, ProductFormData } from "../../types";
+import { FieldData, Product, ProductFormData } from "../../types";
 import { RcFile } from "antd/es/upload";
 import { CONFIG } from "../../constants/constant";
 import { format } from "date-fns";
+import { debounce } from "lodash";
 
 const columns: TableProps<Product>["columns"] = [
   {
@@ -83,12 +84,15 @@ const columns: TableProps<Product>["columns"] = [
 
 const Products = () => {
   const queryClient = useQueryClient();
-  const [dataFilterForm] = Form.useForm();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [dataFilterForm] = Form.useForm();
   const [form] = Form.useForm();
   const {
     token: { colorBgLayout },
   } = theme.useToken();
+
+  const [currentEditingProduct, setCurrentEditingProduct] =
+    useState<Product | null>(null);
 
   const [queryParam, setQueryParam] = useState({
     currentPage: 1,
@@ -96,7 +100,7 @@ const Products = () => {
   });
 
   const { data: products } = useQuery({
-    queryKey: ["users", queryParam],
+    queryKey: ["products", queryParam],
     queryFn: async () => {
       const queryString = new URLSearchParams(
         queryParam as unknown as string
@@ -139,6 +143,45 @@ const Products = () => {
     productMutation(submittingValue);
   };
 
+  const debounceSearchUpdate = useMemo(() => {
+    return debounce((value: string | undefined) => {
+      setQueryParam((prev) => {
+        return { ...prev, currentPage: 1, search: value };
+      });
+    }, 1000);
+  }, []);
+
+  const handleFilterChange = (
+    _changedFields: FieldData[],
+    allFields: FieldData[]
+  ) => {
+    const filteredFields = allFields.map((item) => {
+      return { name: item.name[0], value: item.value };
+    });
+
+    const validFields = filteredFields
+      .filter((field) => {
+        return !!field.value;
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .reduce((acc: { [key: string]: any }, obj) => {
+        acc[obj.name] = obj.value;
+        return acc;
+      }, {});
+
+    if (validFields.search) {
+      debounceSearchUpdate(validFields.search);
+    } else {
+      setQueryParam((prev) => {
+        return {
+          currentPage: 1, // when request goes immedately state updated, current page must be 1 not the previous value
+          pageSize: prev.pageSize,
+          ...validFields,
+        };
+      });
+    }
+  };
+
   return (
     <Space direction="vertical" size={"middle"} style={{ width: "100%" }}>
       <Flex justify="space-between">
@@ -150,7 +193,7 @@ const Products = () => {
           ]}
         />
       </Flex>
-      <Form form={dataFilterForm} onFieldsChange={() => {}}>
+      <Form form={dataFilterForm} onFieldsChange={handleFilterChange}>
         <ProductFilters>
           <Button
             color={"primary"}
@@ -166,22 +209,22 @@ const Products = () => {
       </Form>
 
       <Table
-        // pagination={{
-        //   total: usersData?.meta.totalDocuments,
-        //   current: queryParam.currentPage,
-        //   pageSize: queryParam.pageSize,
-        //   onChange: (page: number) => {
-        //     setQueryParam((prev) => {
-        //       return {
-        //         ...prev,
-        //         currentPage: page,
-        //       };
-        //     });
-        //   },
-        //   showTotal(total, range) {
-        //     return `Showing ${range[0]} - ${range[1]} of ${total}`;
-        //   },
-        // }}
+        pagination={{
+          total: products?.meta.totalDocuments,
+          current: queryParam.currentPage,
+          pageSize: queryParam.pageSize,
+          onChange: (page: number) => {
+            setQueryParam((prev) => {
+              return {
+                ...prev,
+                currentPage: page,
+              };
+            });
+          },
+          showTotal(total, range) {
+            return `Showing ${range[0]} - ${range[1]} of ${total}`;
+          },
+        }}
         columns={[
           ...columns,
           {
@@ -193,8 +236,8 @@ const Products = () => {
                 <Space>
                   <Button
                     type="link"
-                    onClick={() => {
-                      // setCurrentEditingUser(record);
+                    onClick={() => (_value: Text, record: Product) => {
+                      setCurrentEditingProduct(record);
                     }}
                   >
                     Edit
