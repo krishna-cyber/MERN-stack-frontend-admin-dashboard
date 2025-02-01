@@ -48,6 +48,10 @@ const createProduct = async (data: ProductFormData) => {
   });
 };
 
+const fetchProduct = async (queryString: string) => {
+  return api.get(`${GATEWAY.CATALOG_SERVICE}/product?${queryString}`);
+};
+
 export {
   login,
   self,
@@ -61,4 +65,5 @@ export {
   getCategoryList,
   getSingleCategoryById,
   createProduct,
+  fetchProduct,
 };

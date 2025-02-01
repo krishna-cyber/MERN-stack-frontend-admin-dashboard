@@ -64,6 +64,17 @@ export interface ProductFormData {
   tenantId: string;
 }
 
+export interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  image: string[];
+  tenantId: string;
+  category: string;
+  isPublish: boolean;
+  createdAt: string;
+}
+
 export type {
   LoginCredentials,
   Tenant,
