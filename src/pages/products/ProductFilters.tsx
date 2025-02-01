@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Form, Input, Row, Select } from "antd";
+import { Card, Col, Form, Input, Row, Select, Switch } from "antd";
 import React from "react";
 import { getCategoryList, getTenantsList } from "../../http/api";
 import { Category, Tenant } from "../../types";
@@ -31,9 +31,9 @@ const ProductFilters = ({ children }: ProductFilterInterface) => {
       }}
     >
       <Row justify={"space-between"}>
-        <Col span={16}>
+        <Col span={18}>
           <Row gutter={20}>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item
                 name={"search"}
                 style={{
@@ -43,7 +43,7 @@ const ProductFilters = ({ children }: ProductFilterInterface) => {
                 <Input.Search allowClear placeholder="search" />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item name="tenantId" style={{ margin: 0 }}>
                 <Select
                   allowClear
@@ -61,7 +61,7 @@ const ProductFilters = ({ children }: ProductFilterInterface) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item
                 name={"categoryId"}
                 style={{
@@ -83,9 +83,22 @@ const ProductFilters = ({ children }: ProductFilterInterface) => {
                 </Select>
               </Form.Item>
             </Col>
+            <Col span={6}>
+              <Form.Item
+                name={"isPublish"}
+                style={{
+                  margin: 0,
+                }}
+                layout="horizontal"
+                label="Only published"
+                colon={true}
+              >
+                <Switch checkedChildren={"yes"} unCheckedChildren={"no"} />
+              </Form.Item>
+            </Col>
           </Row>
         </Col>
-        <Col span={8} style={{ display: "flex", justifyContent: "end" }}>
+        <Col span={4} style={{ display: "flex", justifyContent: "end" }}>
           {children}
         </Col>
       </Row>
