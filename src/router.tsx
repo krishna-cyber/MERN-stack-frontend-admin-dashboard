@@ -6,7 +6,7 @@ import App from "./app";
 import Homepage from "./pages/Homepage";
 import Users from "./pages/users/Users";
 import Resturants from "./pages/resturants/Resturants";
-import Products from "./pages/products/products";
+import Products from "./pages/products/Products";
 
 export const router = createBrowserRouter([
   {
